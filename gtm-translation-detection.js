@@ -75,7 +75,6 @@
 
       window.dataLayer.push(event);
       events[language + '|' + service] = true;
-      console.log(event);
     }
   }
 
@@ -87,7 +86,6 @@
   // Observe mutations on some attributes to detect translations.
   if (typeof window.MutationObserver !== 'undefined') {
     var observer = new MutationObserver(function (mutations) {
-      console.log(mutations);
       recordTranslationEvent();
     });
 
