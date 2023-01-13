@@ -32,7 +32,7 @@
     return document.querySelector('meta[http-equiv="X-Translated-By"][content="Google"]');
   }
   function isChromeTranslation() {
-    return document.documentElement.className.match('translated-');
+    return document.querySelector('link[href^="https://translate.goog"]');
   }
   function isFirefoxTranslation() {
     return document.querySelector('title').hasAttribute('x-bergamot-translated');
