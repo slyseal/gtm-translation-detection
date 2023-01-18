@@ -73,7 +73,7 @@
       // language attribute and don't provide any mean to detect the target
       // language so this will be recorded as an event with the base language.
       var event = {
-        'event': 'page_ranslated',
+        'event': 'page_translated',
         'translation_language': language,
         'translation_service': service,
         'translation_confidence': determineConfidence(language, service)
@@ -92,7 +92,6 @@
   // Observe mutations on some attributes to detect translations.
   if (typeof window.MutationObserver !== 'undefined') {
     var observer = new MutationObserver(function (mutations) {
-      console.log(mutation);
       recordTranslationEvent();
     });
 
@@ -103,8 +102,9 @@
     observer.observe(document.querySelector('title'), {
       attributeFilter: ['x-bergamot-translated', '_msthash'],
       // We consider that changes to the page title's content is possibly due to
-      // a translation. Set to 'false' to disable.
+      // a translation. Set both attributes below to 'false' to disable.
       characterData: true,
+      childList: true
     });
   }
 })();
