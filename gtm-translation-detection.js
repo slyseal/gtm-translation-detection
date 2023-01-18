@@ -58,6 +58,11 @@
     return 'unknown';
   }
 
+  // Determine how confident we are that a translation occured.
+  function determineConfidence(language, service) {
+    return (language !== baseLanguage ? 2 : 0) + (service !== 'unknown' ? 1 : 0);
+  }
+
   // Record a translation event.
   function recordTranslationEvent() {
     var language = getCurrentLanguage();
@@ -68,9 +73,10 @@
       // language attribute and don't provide any mean to detect the target
       // language so this will be recorded as an event with the base language.
       var event = {
-        'event': 'pageTranslated',
-        'translationLanguage': language,
-        'translationService': service
+        'event': 'page_ranslated',
+        'translation_language': language,
+        'translation_service': service,
+        'translation_confidence': determineConfidence(language, service)
       };
 
       window.dataLayer.push(event);
@@ -86,6 +92,7 @@
   // Observe mutations on some attributes to detect translations.
   if (typeof window.MutationObserver !== 'undefined') {
     var observer = new MutationObserver(function (mutations) {
+      console.log(mutation);
       recordTranslationEvent();
     });
 
@@ -94,7 +101,10 @@
     });
 
     observer.observe(document.querySelector('title'), {
-      attributeFilter: ['x-bergamot-translated', '_msthash']
+      attributeFilter: ['x-bergamot-translated', '_msthash'],
+      // We consider that changes to the page title's content is possibly due to
+      // a translation. Set to 'false' to disable.
+      characterData: true,
     });
   }
 })();
